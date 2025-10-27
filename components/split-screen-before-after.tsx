@@ -25,6 +25,12 @@ export function SplitScreenBeforeAfter() {
       rootMargin: isMobile ? "0px 0px 600px 0px" : "0px 0px -50px 0px",
     }
 
+    // Extra aggressive settings for Smart Filtering section on mobile
+    const tyreKickersOptions = {
+      threshold: 0,
+      rootMargin: isMobile ? "0px 0px 1500px 0px" : "0px 0px -50px 0px",
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -36,18 +42,25 @@ export function SplitScreenBeforeAfter() {
             setVoiceInView(true)
           } else if (entry.target === serviceSectionRef.current) {
             setServiceInView(true)
-          } else if (entry.target === tyreKickersSectionRef.current) {
-            setTyreKickersInView(true)
           }
         }
       })
     }, observerOptions)
 
+    // Separate observer for Smart Filtering section with more aggressive settings
+    const tyreKickersObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.target === tyreKickersSectionRef.current) {
+          setTyreKickersInView(true)
+        }
+      })
+    }, tyreKickersOptions)
+
     if (sectionRef.current) observer.observe(sectionRef.current)
     if (whatsappSectionRef.current) observer.observe(whatsappSectionRef.current)
     if (voiceSectionRef.current) observer.observe(voiceSectionRef.current)
     if (serviceSectionRef.current) observer.observe(serviceSectionRef.current)
-    if (tyreKickersSectionRef.current) observer.observe(tyreKickersSectionRef.current)
+    if (tyreKickersSectionRef.current) tyreKickersObserver.observe(tyreKickersSectionRef.current)
 
     // Check if sections are already in viewport on mount (for mobile/small screens)
     const checkInitialVisibility = () => {
@@ -64,6 +77,7 @@ export function SplitScreenBeforeAfter() {
 
     return () => {
       observer.disconnect()
+      tyreKickersObserver.disconnect()
       clearTimeout(initialCheck)
     }
   }, [])
@@ -72,6 +86,15 @@ export function SplitScreenBeforeAfter() {
     const handleScroll = () => {
       if (window.innerWidth >= 1024) {
         setScrollY(window.scrollY)
+      } else {
+        // On mobile, manually check if Smart Filtering section should be visible
+        if (tyreKickersSectionRef.current && !tyreKickersInView) {
+          const rect = tyreKickersSectionRef.current.getBoundingClientRect()
+          const triggerPoint = window.innerHeight + 1200 // Trigger 1200px before it enters viewport
+          if (rect.top < triggerPoint) {
+            setTyreKickersInView(true)
+          }
+        }
       }
     }
 
@@ -88,7 +111,7 @@ export function SplitScreenBeforeAfter() {
       window.removeEventListener("scroll", handleScroll)
       window.removeEventListener("resize", handleResize)
     }
-  }, [])
+  }, [tyreKickersInView])
 
   const getParallaxOffset = (sectionRef: React.RefObject<HTMLDivElement>) => {
     if (!sectionRef.current || typeof window === "undefined" || window.innerWidth < 1024) {
@@ -985,92 +1008,125 @@ export function SplitScreenBeforeAfter() {
                     serviceInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
                 >
-                  <div
-                    className="relative max-w-[500px] mx-auto lg:max-w-[480px] overflow-hidden"
-                    style={{ height: "600px" }}
-                  >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:rotate-6 w-full max-w-[380px]">
-                      <div className="bg-white rounded-3xl overflow-hidden">
-                        {/* Chat header */}
-                        <div className="bg-gradient-to-r from-slate-600 to-slate-700 px-6 py-4 flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">PM</span>
-                          </div>
-                          <div className="flex-1">
-                            <div className="text-white font-bold text-lg">premium_motors</div>
-                            <div className="text-slate-300 text-sm">Active now</div>
+                  <div className="relative h-[480px] lg:h-[600px] max-w-[500px] lg:max-w-[480px] mx-auto overflow-visible">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:rotate-6 w-full max-w-[260px] lg:max-w-[320px]">
+                      <div className="bg-white rounded-[1.75rem] lg:rounded-[2.5rem] p-2 lg:p-3 shadow-2xl border-[5px] lg:border-8 border-slate-800 h-[460px] lg:h-[650px] overflow-hidden flex flex-col">
+                        {/* Status bar */}
+                        <div className="bg-white px-3 pt-1 pb-0.5 flex items-center justify-between text-black text-[8px] sm:text-[9px] lg:text-xs rounded-t-xl sm:rounded-t-[1.25rem]">
+                          <span className="font-medium">2:15 PM</span>
+                          <div className="flex items-center gap-1">
+                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                            </svg>
+                            <span className="font-semibold">85%</span>
                           </div>
                         </div>
 
+                        {/* Chat header */}
+                        <div className="bg-white border-b border-slate-200 px-3 py-2 sm:py-3 lg:py-3 flex items-center gap-2">
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                          <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0">
+                            <span className="text-white font-bold text-xs sm:text-sm lg:text-base">PM</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-slate-900 font-semibold text-xs sm:text-sm lg:text-base">Premium Motors</div>
+                            <div className="text-slate-500 text-[9px] sm:text-[10px] lg:text-xs">Active now</div>
+                          </div>
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+
                         {/* Chat messages */}
-                        <div className="p-6 space-y-4 bg-slate-50 h-[500px] overflow-hidden">
-                          <div className="flex gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0"></div>
-                            <div className="flex-1">
-                              <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                                <p className="text-slate-700 text-sm">Hi, I need to book a service for my car</p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1 block">10:15 AM</span>
+                        <div className="flex-1 bg-white p-2 lg:p-3 space-y-1 lg:space-y-1 overflow-y-auto scrollbar-hide">
+                          {/* Incoming message */}
+                          <div className="flex items-end gap-0.5 lg:gap-1 mb-0.5">
+                            <div className="w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-slate-400 flex-shrink-0 flex items-center justify-center">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="bg-[#E4E6EB] rounded-2xl lg:rounded-2xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-slate-900 text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                Hi, I need to book a service for my car
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3 justify-end">
-                            <div className="flex-1 flex flex-col items-end">
-                              <div className="bg-gradient-to-r from-slate-600 to-slate-700 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
-                                <p className="text-white text-sm">
-                                  I'd be happy to help! What type of service do you need? We have slots available this
-                                  week.
-                                </p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1">10:15 AM</span>
+                          {/* Outgoing message */}
+                          <div className="flex justify-end mb-0.5">
+                            <div className="bg-[#0084FF] rounded-2xl lg:rounded-2xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-white text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                I'd be happy to help! What type of service do you need? We have slots available this week.
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0"></div>
-                            <div className="flex-1">
-                              <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                                <p className="text-slate-700 text-sm">
-                                  Full service. Also, do you have brake pads in stock?
-                                </p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1 block">10:16 AM</span>
+                          {/* Incoming message */}
+                          <div className="flex items-end gap-0.5 lg:gap-1 mb-0.5">
+                            <div className="w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-slate-400 flex-shrink-0 flex items-center justify-center">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="bg-[#E4E6EB] rounded-2xl lg:rounded-2xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-slate-900 text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                Full service. Also, do you have brake pads in stock?
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3 justify-end">
-                            <div className="flex-1 flex flex-col items-end">
-                              <div className="bg-gradient-to-r from-slate-600 to-slate-700 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
-                                <p className="text-white text-sm">
-                                  Yes! We have brake pads in stock. I can book you in for Thursday at 2 PM and include
-                                  the brake pad replacement. Total: €180
-                                </p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1">10:16 AM</span>
+                          {/* Outgoing message */}
+                          <div className="flex justify-end mb-0.5">
+                            <div className="bg-[#0084FF] rounded-2xl lg:rounded-2xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-white text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                Yes! We have brake pads in stock. I can book you in for Thursday at 2 PM and include the brake pad replacement. Total: €180
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0"></div>
-                            <div className="flex-1">
-                              <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                                <p className="text-slate-700 text-sm">Perfect! Can I order an oil filter too?</p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1 block">10:17 AM</span>
+                          {/* Incoming message */}
+                          <div className="flex items-end gap-0.5 lg:gap-1 mb-0.5">
+                            <div className="w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-slate-400 flex-shrink-0 flex items-center justify-center">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="bg-[#E4E6EB] rounded-2xl lg:rounded-2xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-slate-900 text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                Perfect! Can I order an oil filter too?
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3 justify-end">
-                            <div className="flex-1 flex flex-col items-end">
-                              <div className="bg-gradient-to-r from-slate-600 to-slate-700 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
-                                <p className="text-white text-sm">
-                                  I've added an oil filter (#GF35) to your order. Your appointment is confirmed for
-                                  Thursday at 2 PM. See you then!
-                                </p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1">10:17 AM</span>
+                          {/* Outgoing message */}
+                          <div className="flex justify-end">
+                            <div className="bg-[#0084FF] rounded-2xl lg:rounded-2xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-white text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                I've added an oil filter (#GF35) to your order. Your appointment is confirmed for Thursday at 2 PM. See you then!
+                              </p>
                             </div>
                           </div>
+                        </div>
+
+                        {/* Input bar */}
+                        <div className="bg-white border-t border-slate-200 px-3 py-2 flex items-center gap-2">
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#0084FF]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                          </svg>
+                          <div className="flex-1 bg-slate-100 rounded-full px-3 py-1.5">
+                            <input
+                              type="text"
+                              placeholder="Aa"
+                              className="w-full bg-transparent text-slate-900 text-[10px] sm:text-xs lg:text-sm placeholder-slate-500 outline-none"
+                              disabled
+                            />
+                          </div>
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#0084FF]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                          </svg>
                         </div>
                       </div>
                     </div>
@@ -1080,87 +1136,128 @@ export function SplitScreenBeforeAfter() {
                 {/* Tyre Kickers Section - swapped order so chat mockup is on LEFT, text on RIGHT */}
                 <div
                   ref={tyreKickersSectionRef}
-                  className={`order-2 lg:order-1 transition-all duration-700 ease-out mt-12 lg:mt-24 ${
+                  className={`order-2 lg:order-1 transition-all duration-700 ease-out mt-6 lg:mt-24 ${
                     tyreKickersInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
                 >
-                  <div className="relative h-[600px] max-w-[500px] lg:max-w-[480px] mx-auto overflow-hidden">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:-rotate-6 w-full max-w-[380px]">
-                      <div className="bg-white rounded-3xl overflow-hidden">
-                        <div className="bg-gradient-to-r from-slate-600 to-slate-700 px-6 py-4 flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">PM</span>
-                          </div>
-                          <div className="flex-1">
-                            <div className="text-white font-bold text-lg">Premium Motors</div>
-                            <div className="text-slate-300 text-sm">Active now</div>
+                  <div className="relative h-[480px] lg:h-[600px] max-w-[500px] lg:max-w-[480px] mx-auto overflow-visible">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:-rotate-6 w-full max-w-[260px] lg:max-w-[320px]">
+                      <div className="bg-white rounded-[1.75rem] lg:rounded-[2.5rem] p-2 lg:p-3 shadow-2xl border-[5px] lg:border-8 border-slate-800 h-[460px] lg:h-[650px] overflow-hidden flex flex-col">
+                        {/* Status bar */}
+                        <div className="bg-white px-3 pt-1 pb-0.5 flex items-center justify-between text-black text-[8px] sm:text-[9px] lg:text-xs rounded-t-xl sm:rounded-t-[1.25rem]">
+                          <span className="font-medium">9:41</span>
+                          <div className="flex items-center gap-1">
+                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                            </svg>
                           </div>
                         </div>
 
-                        <div className="p-6 space-y-4 bg-slate-50 h-[500px] overflow-hidden">
-                          <div className="flex gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0"></div>
-                            <div className="flex-1">
-                              <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                                <p className="text-slate-700 text-sm">What's the NCT status on the BMW?</p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1 block">14:23</span>
+                        {/* Chat header */}
+                        <div className="bg-white border-b border-slate-200 px-3 py-2 sm:py-3 lg:py-3 flex items-center gap-2">
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                          <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full bg-gradient-to-br from-purple-400 via-pink-500 to-orange-400 flex items-center justify-center flex-shrink-0 ring-2 ring-white">
+                            <span className="text-white font-bold text-xs sm:text-sm lg:text-base">PM</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-slate-900 font-semibold text-xs sm:text-sm lg:text-base">Premium Motors</div>
+                            <div className="text-slate-500 text-[9px] sm:text-[10px] lg:text-xs">silvaqueen15</div>
+                          </div>
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-6 lg:h-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+
+                        {/* Chat messages */}
+                        <div className="flex-1 bg-white p-2 lg:p-3 space-y-1 lg:space-y-1 overflow-y-auto scrollbar-hide">
+                          {/* Incoming message */}
+                          <div className="flex items-end gap-0.5 lg:gap-1 mb-0.5">
+                            <div className="w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-gradient-to-br from-purple-400 via-pink-500 to-orange-400 flex-shrink-0 flex items-center justify-center">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="border border-slate-300 lg:border-2 rounded-2xl lg:rounded-3xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-slate-900 text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                What's the NCT status on the BMW?
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3 justify-end">
-                            <div className="flex-1 flex flex-col items-end">
-                              <div className="bg-gradient-to-r from-slate-600 to-slate-700 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
-                                <p className="text-white text-sm">
-                                  The BMW has a fresh NCT valid until March 2026. Full service history available!
-                                </p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1">14:23</span>
+                          {/* Outgoing message */}
+                          <div className="flex justify-end mb-0.5">
+                            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl lg:rounded-3xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-white text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                The BMW has a fresh NCT valid until March 2026. Full service history available!
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0"></div>
-                            <div className="flex-1">
-                              <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                                <p className="text-slate-700 text-sm">How many miles?</p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1 block">14:24</span>
+                          {/* Incoming message */}
+                          <div className="flex items-end gap-0.5 lg:gap-1 mb-0.5">
+                            <div className="w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-gradient-to-br from-purple-400 via-pink-500 to-orange-400 flex-shrink-0 flex items-center justify-center">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="border border-slate-300 lg:border-2 rounded-2xl lg:rounded-3xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-slate-900 text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                How many miles?
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3 justify-end">
-                            <div className="flex-1 flex flex-col items-end">
-                              <div className="bg-gradient-to-r from-slate-600 to-slate-700 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
-                                <p className="text-white text-sm">
-                                  45,000 miles with full dealer service history. Would you like to schedule a test
-                                  drive?
-                                </p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1">14:24</span>
+                          {/* Outgoing message */}
+                          <div className="flex justify-end mb-0.5">
+                            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl lg:rounded-3xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-white text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                45,000 miles with full dealer service history. Would you like to schedule a test drive?
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3">
-                            <div className="w-8 h-8 rounded-full bg-slate-300 flex-shrink-0"></div>
-                            <div className="flex-1">
-                              <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                                <p className="text-slate-700 text-sm">Do you take trade-ins?</p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1 block">14:25</span>
+                          {/* Incoming message */}
+                          <div className="flex items-end gap-0.5 lg:gap-1 mb-0.5">
+                            <div className="w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-gradient-to-br from-purple-400 via-pink-500 to-orange-400 flex-shrink-0 flex items-center justify-center">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <div className="border border-slate-300 lg:border-2 rounded-2xl lg:rounded-3xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-slate-900 text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                Do you take trade-ins?
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex gap-3 justify-end">
-                            <div className="flex-1 flex flex-col items-end">
-                              <div className="bg-gradient-to-r from-slate-600 to-slate-700 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm max-w-[85%]">
-                                <p className="text-white text-sm">
-                                  Yes! We offer competitive trade-in values. What vehicle are you looking to trade?
-                                </p>
-                              </div>
-                              <span className="text-xs text-slate-400 mt-1">14:25</span>
+                          {/* Outgoing message */}
+                          <div className="flex justify-end">
+                            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl lg:rounded-3xl px-2 py-1 lg:px-3 lg:py-2 max-w-[70%] lg:max-w-[65%]">
+                              <p className="text-white text-[10px] lg:text-sm leading-snug lg:leading-relaxed">
+                                Yes! We offer competitive trade-in values. What vehicle are you looking to trade?
+                              </p>
                             </div>
                           </div>
+                        </div>
+
+                        {/* Input bar */}
+                        <div className="bg-white border-t border-slate-200 px-3 py-2 flex items-center gap-2">
+                          <div className="flex-1 bg-white border border-slate-300 rounded-full px-3 py-1.5">
+                            <input
+                              type="text"
+                              placeholder="Message..."
+                              className="w-full bg-transparent text-slate-900 text-[10px] sm:text-xs lg:text-sm placeholder-slate-500 outline-none"
+                              disabled
+                            />
+                          </div>
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                          </svg>
                         </div>
                       </div>
                     </div>
