@@ -88,7 +88,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium text-black dark:text-white whitespace-pre"
       >
-        Clutch By Cliste 1.0
+        ClisteOS 1.0
       </motion.span>
     </Link>
   )
