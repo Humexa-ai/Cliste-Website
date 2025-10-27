@@ -22,7 +22,7 @@ export function SplitScreenBeforeAfter() {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
     const observerOptions = {
       threshold: 0,
-      rootMargin: isMobile ? "0px 0px 600px 0px" : "0px 0px -50px 0px",
+      rootMargin: isMobile ? "0px 0px 800px 0px" : "0px 0px -50px 0px",
     }
 
     // Extra aggressive settings for Smart Filtering section on mobile
@@ -62,7 +62,8 @@ export function SplitScreenBeforeAfter() {
     if (serviceSectionRef.current) observer.observe(serviceSectionRef.current)
     if (tyreKickersSectionRef.current) tyreKickersObserver.observe(tyreKickersSectionRef.current)
 
-    // Check if sections are already in viewport on mount (for mobile/small screens)
+    // Only check if the FIRST section (hero) is in viewport on mount
+    // This ensures the hero animates immediately, but other sections wait for scroll
     const checkInitialVisibility = () => {
       if (sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect()

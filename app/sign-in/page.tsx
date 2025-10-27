@@ -19,8 +19,8 @@ export default function SignIn() {
   }
 
   const handleGoogleSignIn = () => {
-    // UI only - no actual authentication
-    alert("Google Sign-In will be integrated soon!")
+    // UI only - redirect to dashboard
+    window.location.href = "/dashboard"
   }
 
   // Focus first input when code screen appears
@@ -49,7 +49,7 @@ export default function SignIn() {
         if (isComplete) {
           setStep("success")
           setTimeout(() => {
-            window.location.href = "/"
+            window.location.href = "/dashboard"
           }, 2000)
         }
       }
