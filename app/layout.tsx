@@ -8,6 +8,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Dancing_Script, Caveat } from "next/font/google"
 import { Providers } from "@/components/providers"
 
+export const dynamic = 'force-dynamic'
+
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
   variable: "--font-dancing-script",
