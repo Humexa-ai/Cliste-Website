@@ -18,9 +18,11 @@ export function SplitScreenBeforeAfter() {
   const tyreKickersSectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Mobile-friendly observer - triggers much earlier on small screens
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
     const observerOptions = {
-      threshold: 0.05,
-      rootMargin: "0px 0px -50px 0px",
+      threshold: 0,
+      rootMargin: isMobile ? "0px 0px 600px 0px" : "0px 0px -50px 0px",
     }
 
     const observer = new IntersectionObserver((entries) => {
@@ -590,101 +592,92 @@ export function SplitScreenBeforeAfter() {
                         transform: `translateY(${voiceParallax}px)`,
                       }}
                     >
-                      <div className="bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] p-2 sm:p-3 lg:p-4 shadow-2xl border-[6px] sm:border-8 border-slate-800 aspect-[9/19.5] lg:aspect-auto lg:h-[700px] overflow-hidden">
-                        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-t-xl sm:rounded-t-[1.25rem] px-3 py-4 sm:py-5 lg:py-8 text-center border-b border-slate-700">
-                          <div className="text-red-400 text-[9px] sm:text-[10px] lg:text-sm mb-2 lg:mb-3 font-medium tracking-wide">
-                            MISSED CALL
+                      <div className="bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] p-2 sm:p-3 lg:p-4 shadow-2xl border-[6px] sm:border-8 border-slate-800 aspect-[9/19.5] lg:aspect-auto lg:h-[700px] overflow-hidden flex flex-col">
+                        {/* Header */}
+                        <div className="bg-gradient-to-br from-green-900 to-slate-900 rounded-t-xl sm:rounded-t-[1.25rem] px-3 py-3 sm:py-4 lg:py-5 text-center border-b border-green-700/50">
+                          <div className="text-green-400 text-[9px] sm:text-[10px] lg:text-sm mb-1.5 lg:mb-2 font-medium tracking-wide flex items-center justify-center gap-1.5">
+                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            ANSWERED BY CLISTE AI
                           </div>
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-20 lg:h-20 mx-auto rounded-full bg-gradient-to-br from-red-500 via-red-600 to-red-700 flex items-center justify-center mb-2 sm:mb-3 lg:mb-4 shadow-lg shadow-red-500/30 ring-4 ring-red-500/20">
-                            <svg
-                              className="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 text-white"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </div>
-                          <div className="text-white font-bold text-xs sm:text-sm lg:text-lg mb-1">Sarah Mitchell</div>
-                          <div className="text-slate-400 text-[9px] sm:text-[10px] lg:text-sm font-mono">
-                            +353 87 123 4567
+                          <div className="text-white font-bold text-xs sm:text-sm lg:text-lg mb-0.5">James O'Brien</div>
+                          <div className="text-slate-400 text-[9px] sm:text-[10px] lg:text-xs font-mono">
+                            +353 86 234 5678
                           </div>
                         </div>
-                        <div className="bg-slate-900 rounded-b-xl sm:rounded-b-[1.25rem] p-2 sm:p-3 lg:p-4 h-[calc(100%-140px)] lg:h-[calc(100%-200px)] overflow-hidden flex flex-col">
-                          <div className="bg-gradient-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 rounded-xl p-2 lg:p-3 mb-2 lg:mb-3">
-                            <div className="text-center">
-                              <div className="text-red-400 text-[10px] sm:text-xs lg:text-sm font-bold mb-1">
-                                WE'RE CURRENTLY CLOSED
-                              </div>
-                              <div className="text-slate-300 text-[8px] sm:text-[10px] lg:text-xs">
-                                Office Hours: Mon-Fri
-                              </div>
-                              <div className="text-white text-[9px] sm:text-[10px] lg:text-sm font-semibold">
-                                9:00 AM - 5:00 PM
-                              </div>
+
+                        {/* Call Info */}
+                        <div className="bg-slate-900 p-2 sm:p-3 lg:p-4 border-b border-slate-700/50">
+                          <div className="flex items-center justify-between text-[8px] sm:text-[9px] lg:text-xs">
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                              <span className="text-green-400 font-semibold">Call Active</span>
+                            </div>
+                            <span className="text-slate-400 font-mono">03:42</span>
+                          </div>
+                        </div>
+
+                        {/* Conversation Transcript */}
+                        <div className="flex-1 bg-slate-900 p-2 sm:p-3 lg:p-4 overflow-y-auto scrollbar-hide space-y-2 lg:space-y-2.5">
+                          <div className="bg-slate-800/50 rounded-lg p-2 lg:p-2.5 border-l-2 border-purple-500">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="text-purple-400 font-semibold text-[8px] sm:text-[9px] lg:text-xs">Cliste AI</span>
+                              <span className="text-slate-500 text-[7px] sm:text-[8px] lg:text-[10px]">03:40</span>
+                            </div>
+                            <div className="text-slate-300 text-[8px] sm:text-[9px] lg:text-xs leading-relaxed">
+                              Good evening! Premium Motors. How can I help you today?
                             </div>
                           </div>
 
-                          <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-2 lg:p-3 mb-2 lg:mb-3">
-                            <div className="text-slate-300 text-[9px] sm:text-[10px] lg:text-sm font-semibold mb-1.5">
-                              Call Details
+                          <div className="bg-slate-800/50 rounded-lg p-2 lg:p-2.5 border-l-2 border-blue-500">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="text-blue-400 font-semibold text-[8px] sm:text-[9px] lg:text-xs">James</span>
+                              <span className="text-slate-500 text-[7px] sm:text-[8px] lg:text-[10px]">03:40</span>
                             </div>
-                            <div className="space-y-1 text-[8px] sm:text-[9px] lg:text-xs">
-                              <div className="flex justify-between">
-                                <span className="text-slate-400">Time</span>
-                                <span className="text-white font-medium">7:00 PM</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-slate-400">Duration</span>
-                                <span className="text-white font-medium">3 rings</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-slate-400">Status</span>
-                                <span className="text-red-400 font-semibold">Unanswered</span>
-                              </div>
+                            <div className="text-slate-300 text-[8px] sm:text-[9px] lg:text-xs leading-relaxed">
+                              Hi, I'm interested in the BMW X5. Is it still available?
                             </div>
                           </div>
 
-                          <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-2 lg:p-3 mb-2 lg:mb-3">
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                              <svg
-                                className="w-3 h-3 lg:w-4 lg:h-4 text-slate-400"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                              </svg>
-                              <span className="text-slate-300 text-xs lg:text-xs font-medium">
-                                Voicemail
-                              </span>
+                          <div className="bg-slate-800/50 rounded-lg p-2 lg:p-2.5 border-l-2 border-purple-500">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="text-purple-400 font-semibold text-[8px] sm:text-[9px] lg:text-xs">Cliste AI</span>
+                              <span className="text-slate-500 text-[7px] sm:text-[8px] lg:text-[10px]">03:41</span>
                             </div>
-                            <div className="text-slate-400 text-[8px] sm:text-[9px] lg:text-xs italic leading-relaxed">
-                              "Hi, you've reached Premium Motors. We're currently closed. Please leave a message..."
+                            <div className="text-slate-300 text-[8px] sm:text-[9px] lg:text-xs leading-relaxed">
+                              Yes! The 2024 BMW X5 is available. Would you like to schedule a test drive?
                             </div>
                           </div>
 
-                          <div className="mt-auto bg-gradient-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 rounded-xl p-2 lg:p-3">
-                            <div className="flex items-center justify-center gap-1.5">
-                              <svg
-                                className="w-3 h-3 lg:w-4 lg:h-4 text-red-400"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-red-400 text-[9px] sm:text-[10px] lg:text-sm font-bold uppercase tracking-wide">
-                                Lead Lost
-                              </span>
+                          <div className="bg-slate-800/50 rounded-lg p-2 lg:p-2.5 border-l-2 border-blue-500">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="text-blue-400 font-semibold text-[8px] sm:text-[9px] lg:text-xs">James</span>
+                              <span className="text-slate-500 text-[7px] sm:text-[8px] lg:text-[10px]">03:41</span>
                             </div>
+                            <div className="text-slate-300 text-[8px] sm:text-[9px] lg:text-xs leading-relaxed">
+                              Absolutely! What's the price and when can I come by?
+                            </div>
+                          </div>
+
+                          <div className="bg-slate-800/50 rounded-lg p-2 lg:p-2.5 border-l-2 border-purple-500">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="text-purple-400 font-semibold text-[8px] sm:text-[9px] lg:text-xs">Cliste AI</span>
+                              <span className="text-slate-500 text-[7px] sm:text-[8px] lg:text-[10px]">03:42</span>
+                            </div>
+                            <div className="text-slate-300 text-[8px] sm:text-[9px] lg:text-xs leading-relaxed">
+                              It's priced at €62,500. I have availability tomorrow at 2pm or Thursday at 11am...
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Lead Captured Banner */}
+                        <div className="bg-gradient-to-br from-green-900/40 to-green-800/40 border-t-2 border-green-500/50 rounded-b-xl sm:rounded-b-[1.25rem] p-2 lg:p-3">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <svg className="w-3 h-3 lg:w-4 lg:h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <span className="text-green-400 text-[9px] sm:text-[10px] lg:text-sm font-bold uppercase tracking-wide">
+                              Lead Captured
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -693,14 +686,15 @@ export function SplitScreenBeforeAfter() {
 
                   {/* Smaller phone - NO parallax */}
                   <div className="absolute left-0 top-12 w-[160px] lg:w-[45%] z-10">
-                    <div className="bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] p-2 sm:p-3 lg:p-4 shadow-2xl border-[6px] sm:border-8 border-slate-800 aspect-[9/19.5] lg:aspect-auto lg:h-[600px] overflow-hidden">
-                      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-t-xl sm:rounded-t-[1.25rem] px-3 py-4 sm:py-5 lg:py-8 text-center border-b border-slate-700">
-                        <div className="text-slate-400 text-[9px] sm:text-[10px] lg:text-sm mb-2 lg:mb-3 font-medium tracking-wide">
-                          INCOMING CALL
+                    <div className="bg-slate-900 rounded-[2rem] sm:rounded-[2.5rem] p-2 sm:p-3 lg:p-4 shadow-2xl border-[6px] sm:border-8 border-slate-800 aspect-[9/19.5] lg:aspect-auto lg:h-[600px] overflow-hidden flex flex-col">
+                      {/* Header */}
+                      <div className="bg-gradient-to-br from-red-900 to-slate-900 rounded-t-xl sm:rounded-t-[1.25rem] px-3 py-4 sm:py-5 lg:py-6 text-center border-b border-red-700/50">
+                        <div className="text-red-400 text-[9px] sm:text-[10px] lg:text-sm mb-2 lg:mb-3 font-medium tracking-wide">
+                          MISSED CALL
                         </div>
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-20 lg:h-20 mx-auto rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center mb-2 sm:mb-3 lg:mb-4 shadow-lg shadow-slate-500/30 ring-4 ring-slate-500/20">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 mx-auto rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mb-2 sm:mb-3 lg:mb-3 shadow-lg shadow-red-500/30 ring-4 ring-red-500/20">
                           <svg
-                            className="w-6 h-6 sm:w-7 sm:h-7 lg:w-10 lg:h-10 text-white"
+                            className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -709,123 +703,84 @@ export function SplitScreenBeforeAfter() {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                               strokeWidth={2}
-                              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                              d="M6 18L18 6M6 6l12 12"
                             />
                           </svg>
                         </div>
-                        <div className="text-white font-bold text-xs sm:text-sm lg:text-lg mb-1">Sarah Mitchell</div>
-                        <div className="text-slate-400 text-xs lg:text-xs font-mono">
-                          +353 87 123 4567
+                        <div className="text-white font-bold text-xs sm:text-sm lg:text-base mb-0.5">Emma Johnson</div>
+                        <div className="text-slate-400 text-[9px] sm:text-[10px] lg:text-xs font-mono">
+                          +353 85 789 1234
                         </div>
                       </div>
 
-                      <div className="bg-[#0d1418] rounded-b-xl sm:rounded-b-[1.25rem] p-2 sm:p-3 lg:p-4 h-[calc(100%-140px)] lg:h-[calc(100%-200px)] overflow-y-auto scrollbar-hide space-y-2 lg:space-y-3">
-                        <div className="bg-gradient-to-br from-slate-800 to-slate-800/80 rounded-xl p-2 sm:p-3 lg:p-4 border border-slate-700">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
-                            <span className="text-white text-[10px] sm:text-xs lg:text-sm font-semibold">
-                              Call Active
-                            </span>
-                            <span className="ml-auto text-slate-400 text-[9px] lg:text-xs font-mono">02:34</span>
-                          </div>
-                          <div className="h-8 lg:h-12 flex items-center gap-1">
-                            {[...Array(20)].map((_, i) => (
-                              <div
-                                key={i}
-                                className="flex-1 bg-gradient-to-t from-slate-500 to-slate-400 rounded-full"
-                                style={{
-                                  height: `${Math.random() * 60 + 40}%`,
-                                  animation: `pulse ${Math.random() * 0.5 + 0.5}s ease-in-out infinite`,
-                                }}
-                              />
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="bg-slate-800/50 rounded-xl p-2 sm:p-3 lg:p-4 border border-slate-700/50">
-                          <div className="flex items-center gap-2 mb-2 lg:mb-3">
-                            <svg
-                              className="w-3 h-3 lg:w-4 lg:h-4 text-orange-400"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span className="text-slate-300 text-[9px] sm:text-[10px] lg:text-sm font-semibold">
-                              Live Conversation
-                            </span>
-                          </div>
-                          <div className="space-y-2 lg:space-y-3 text-[8px] sm:text-[9px] lg:text-xs">
-                            <div className="bg-slate-900/50 rounded-lg p-2 border-l-2 border-slate-500">
-                              <div className="text-slate-400 font-semibold mb-0.5">Cliste</div>
-                              <div className="text-slate-300 leading-relaxed">
-                                "The Audi A4 is available. Would you like to schedule a test drive?"
-                              </div>
+                      {/* Content */}
+                      <div className="flex-1 bg-slate-900 p-2 sm:p-3 lg:p-4 overflow-y-auto scrollbar-hide space-y-2 lg:space-y-2.5">
+                        {/* Closed Notice */}
+                        <div className="bg-gradient-to-br from-red-500/20 to-red-600/20 border-2 border-red-500/40 rounded-xl p-2 sm:p-2.5 lg:p-3">
+                          <div className="text-center">
+                            <div className="text-red-400 text-[10px] sm:text-xs lg:text-sm font-bold mb-1">
+                              OFFICE CLOSED
                             </div>
-                            <div className="bg-slate-900/50 rounded-lg p-2 border-l-2 border-blue-500">
-                              <div className="text-blue-400 font-semibold mb-0.5">Sarah</div>
-                              <div className="text-slate-300 leading-relaxed">
-                                "Yes please! What times do you have available this week?"
-                              </div>
+                            <div className="text-slate-300 text-[8px] sm:text-[9px] lg:text-xs">
+                              Office Hours: Mon-Fri
                             </div>
-                            <div className="bg-slate-900/50 rounded-lg p-2 border-l-2 border-slate-500">
-                              <div className="text-slate-400 font-semibold mb-0.5">Cliste</div>
-                              <div className="text-slate-300 leading-relaxed">
-                                "I have tomorrow at 11am, Thursday at 3pm, or Friday at 10am..."
-                              </div>
-                            </div>
-                            <div className="bg-slate-900/50 rounded-lg p-2 border-l-2 border-blue-500">
-                              <div className="text-blue-400 font-semibold mb-0.5">Sarah</div>
-                              <div className="text-slate-300 leading-relaxed">
-                                "Thursday at 3pm works perfectly. What's the price on that model?"
-                              </div>
-                            </div>
-                            <div className="bg-slate-900/50 rounded-lg p-2 border-l-2 border-slate-500">
-                              <div className="text-slate-400 font-semibold mb-0.5">Cliste</div>
-                              <div className="text-slate-300 leading-relaxed">
-                                "The Audi A4 is priced at €32,500. It's a 2023 model with 12,000km. Would you like to
-                                discuss financing options?"
-                              </div>
+                            <div className="text-white text-[9px] sm:text-[10px] lg:text-xs font-semibold">
+                              9:00 AM - 6:00 PM
                             </div>
                           </div>
                         </div>
 
-                        <div className="bg-gradient-to-br from-slate-700/20 to-slate-800/20 border-2 border-slate-600/40 rounded-xl p-2 lg:p-3 shadow-lg shadow-slate-600/10">
-                          <div className="flex items-center gap-1.5">
+                        {/* Call Details */}
+                        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-2 sm:p-2.5 lg:p-3">
+                          <div className="text-slate-300 text-[9px] sm:text-[10px] lg:text-xs font-semibold mb-1.5">
+                            Call Details
+                          </div>
+                          <div className="space-y-1 text-[8px] sm:text-[9px] lg:text-xs">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Time</span>
+                              <span className="text-white font-medium">7:15 PM</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Duration</span>
+                              <span className="text-white font-medium">3 rings</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Status</span>
+                              <span className="text-red-400 font-semibold">Unanswered</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Voicemail */}
+                        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-2 sm:p-2.5 lg:p-3">
+                          <div className="flex items-center gap-1.5 mb-1.5">
                             <svg
                               className="w-3 h-3 lg:w-4 lg:h-4 text-slate-400"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
-                              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zM6 8a1 1 0 000 2h.01a1 1 0 100-2H6zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                                clipRule="evenodd"
-                              />
+                              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                             </svg>
-                            <span className="text-slate-300 text-xs lg:text-xs font-bold uppercase tracking-wide">
-                              Lead Insights
+                            <span className="text-slate-300 text-[9px] sm:text-[10px] lg:text-xs font-medium">
+                              Voicemail
                             </span>
                           </div>
-                          <div className="grid grid-cols-2 gap-1.5 text-[8px] sm:text-[9px] lg:text-xs">
-                            <div className="bg-slate-900/40 rounded-lg p-1.5 border border-slate-600/20">
-                              <div className="text-slate-300 font-semibold">High Intent</div>
-                              <div className="text-slate-300">Ready to buy</div>
-                            </div>
-                            <div className="bg-slate-900/40 rounded-lg p-1.5 border border-slate-600/20">
-                              <div className="text-slate-300 font-semibold">€30-35k</div>
-                              <div className="text-slate-300">Budget range</div>
-                            </div>
-                            <div className="bg-slate-900/40 rounded-lg p-1.5 border border-slate-600/20 col-span-2">
-                              <div className="text-slate-300 font-semibold">Audi A4 • Sedan • Automatic</div>
-                              <div className="text-slate-300">Vehicle preferences</div>
-                            </div>
+                          <div className="text-slate-400 text-[8px] sm:text-[9px] lg:text-xs italic leading-relaxed">
+                            "You've reached Premium Motors. We're closed. Leave a message and we'll call back during business hours..."
                           </div>
+                        </div>
+
+                      </div>
+
+                      {/* Lead Lost Banner */}
+                      <div className="bg-gradient-to-br from-red-900/40 to-red-800/40 border-t-2 border-red-500/50 rounded-b-xl sm:rounded-b-[1.25rem] p-2 sm:p-2.5 lg:p-3">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <svg className="w-3 h-3 lg:w-4 lg:h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" />
+                          </svg>
+                          <span className="text-red-400 text-[9px] sm:text-[10px] lg:text-sm font-bold uppercase tracking-wide">
+                            Lead Lost
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -912,7 +867,7 @@ export function SplitScreenBeforeAfter() {
             </div>
 
             {/* Service & Parts Section */}
-            <div ref={serviceSectionRef} className="mt-6 lg:mt-24 pt-6 lg:pt-24 border-t border-slate-200">
+            <div ref={serviceSectionRef} className="mt-6 lg:mt-32 pt-6 lg:pt-32 border-t border-slate-200">
               <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-center max-w-6xl mx-auto">
                 <div
                   className={`transition-all duration-700 ease-out ${

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { Menu, X, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 
 const navigation = [
   { name: "Dentists", href: "#features" },
@@ -24,45 +25,61 @@ export function GlassmorphismNav() {
     }, 100)
 
     const controlNavbar = () => {
-      if (typeof window !== "undefined") {
-        const currentScrollY = window.scrollY
+      if (typeof window === "undefined") return
+      
+      const currentScrollY = window.scrollY
+      const isMobile = window.innerWidth < 768
+      
+      // Different thresholds for mobile vs desktop
+      const scrollThreshold = isMobile ? 10 : 50
 
-        console.log("[v0] Scroll event - currentScrollY:", currentScrollY, "lastScrollY:", lastScrollY.current)
+      console.log("[v0] Scroll - Y:", currentScrollY, "Last:", lastScrollY.current, "isMobile:", isMobile, "isVisible:", isVisible)
 
-        // Only hide/show after scrolling past 50px to avoid flickering at top
-        if (currentScrollY > 50) {
-          if (currentScrollY > lastScrollY.current && currentScrollY - lastScrollY.current > 5) {
-            // Scrolling down - hide navbar
-            console.log("[v0] Hiding navbar - scrolling down")
+      // Only hide/show after scrolling past threshold
+      if (currentScrollY > scrollThreshold) {
+        if (isMobile) {
+          // Mobile: Super aggressive - any movement
+          if (currentScrollY > lastScrollY.current) {
+            console.log("[v0] 📱⬇️ MOBILE: Hiding navbar")
             setIsVisible(false)
-          } else if (lastScrollY.current - currentScrollY > 5) {
-            // Scrolling up - show navbar
-            console.log("[v0] Showing navbar - scrolling up")
+          } else if (currentScrollY < lastScrollY.current) {
+            console.log("[v0] 📱⬆️ MOBILE: Showing navbar")
             setIsVisible(true)
           }
         } else {
-          // Always show navbar when near top
-          console.log("[v0] Showing navbar - near top")
+          // Desktop: Require 5px movement
+          if (currentScrollY > lastScrollY.current && currentScrollY - lastScrollY.current > 5) {
+            console.log("[v0] 💻⬇️ DESKTOP: Hiding navbar")
+            setIsVisible(false)
+          } else if (lastScrollY.current - currentScrollY > 5) {
+            console.log("[v0] 💻⬆️ DESKTOP: Showing navbar")
+            setIsVisible(true)
+          }
+        }
+      } else {
+        // Always show navbar when near top
+        if (!isVisible) {
+          console.log("[v0] 🔝 Near top - showing navbar")
           setIsVisible(true)
         }
-
-        lastScrollY.current = currentScrollY
       }
+
+      lastScrollY.current = currentScrollY
     }
 
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", controlNavbar, { passive: true })
-      console.log("[v0] Scroll listener added")
+      console.log("[v0] ✅ Scroll listener added")
 
       return () => {
         window.removeEventListener("scroll", controlNavbar)
         clearTimeout(timer)
-        console.log("[v0] Scroll listener removed")
+        console.log("[v0] ❌ Scroll listener removed")
       }
     }
 
     return () => clearTimeout(timer)
-  }, []) // Removed lastScrollY dependency to prevent infinite re-renders
+  }, [isVisible]) // Need isVisible for checking in callback
 
   const scrollToTop = () => {
     console.log("[v0] Scrolling to top")
@@ -103,11 +120,11 @@ export function GlassmorphismNav() {
   return (
     <>
       <nav
-        className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-          isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 md:-translate-y-24 opacity-0"
+        className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
+          isVisible ? "translate-y-0 opacity-100" : "-translate-y-32 opacity-0 pointer-events-none"
         } ${hasLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         style={{
-          transition: hasLoaded ? "all 0.5s ease-out" : "opacity 0.8s ease-out, transform 0.8s ease-out",
+          transition: hasLoaded ? "all 0.3s ease-out" : "opacity 0.8s ease-out, transform 0.8s ease-out",
         }}
       >
         {/* Main Navigation */}
@@ -155,13 +172,17 @@ export function GlassmorphismNav() {
 
               {/* Desktop CTA Button */}
               <div className="hidden md:block">
-                <button
-                  className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group"
-                  onClick={() => scrollToSection("#contact")}
-                >
-                  <span className="mr-2">Get Started</span>
-                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </button>
+                <SignedOut>
+                  <Link href="/sign-in">
+                    <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group">
+                      <span className="mr-2">Log In</span>
+                      <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                    </button>
+                  </Link>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton afterSignOutUrl="/" />
+                </SignedIn>
               </div>
 
               {/* Mobile Menu Button */}
@@ -237,18 +258,26 @@ export function GlassmorphismNav() {
                   ),
                 )}
                 <div className="h-px bg-white/10 my-2" />
-                <button
-                  className={`relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group transform ${
-                    isOpen ? "animate-mobile-menu-item" : ""
-                  }`}
-                  style={{
-                    animationDelay: isOpen ? `${navigation.length * 80 + 150}ms` : "0ms",
-                  }}
-                  onClick={() => scrollToSection("#contact")}
-                >
-                  <span className="mr-2">Get Started</span>
-                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </button>
+                <SignedOut>
+                  <Link href="/sign-in" className="w-full">
+                    <button
+                      className={`relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group transform w-full ${
+                        isOpen ? "animate-mobile-menu-item" : ""
+                      }`}
+                      style={{
+                        animationDelay: isOpen ? `${navigation.length * 80 + 150}ms` : "0ms",
+                      }}
+                    >
+                      <span className="mr-2">Log In</span>
+                      <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                    </button>
+                  </Link>
+                </SignedOut>
+                <SignedIn>
+                  <div className={`flex items-center justify-center ${isOpen ? "animate-mobile-menu-item" : ""}`}>
+                    <UserButton afterSignOutUrl="/" />
+                  </div>
+                </SignedIn>
               </div>
             </div>
           </div>
