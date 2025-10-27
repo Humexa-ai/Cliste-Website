@@ -4,66 +4,23 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Aurora from "@/components/Aurora"
-import { useSignIn } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
 
 export default function SignIn() {
-  const { isLoaded, signIn, setActive } = useSignIn()
   const [email, setEmail] = useState("")
   const [step, setStep] = useState<"email" | "code" | "success">("email")
   const [code, setCode] = useState(["", "", "", "", "", ""])
   const codeInputRefs = useRef<(HTMLInputElement | null)[]>([])
-  const router = useRouter()
 
-  const handleEmailSubmit = async (e: React.FormEvent) => {
+  const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!isLoaded) return
-
-    try {
-      // Start the sign-in process using the email method
-      const result = await signIn.create({
-        identifier: email,
-      })
-
-      // Send the user an email with the code
-      await signIn.prepareFirstFactor({
-        strategy: "email_code",
-        emailAddressId: signIn.supportedFirstFactors.find(
-          (factor: any) => factor.strategy === "email_code"
-        )?.emailAddressId,
-      })
-
+    if (email) {
       setStep("code")
-    } catch (err: any) {
-      // If account doesn't exist, create it (sign up flow)
-      if (err.errors[0]?.code === "form_identifier_not_found") {
-        try {
-          const { signUp } = await import("@clerk/nextjs")
-          // This will be handled by Clerk's sign-up flow
-          // For now, show an alert
-          alert("Account not found. Please use Google sign-in or contact support to create an account.")
-        } catch (signUpErr) {
-          console.error("Sign up error:", signUpErr)
-        }
-      } else {
-        console.error("Error:", err.errors[0]?.longMessage || err.message)
-        alert(err.errors[0]?.longMessage || "An error occurred. Please try again.")
-      }
     }
   }
 
-  const handleGoogleSignIn = async () => {
-    if (!isLoaded) return
-
-    try {
-      await signIn.authenticateWithRedirect({
-        strategy: "oauth_google",
-        redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/",
-      })
-    } catch (err: any) {
-      console.error("Error:", err.errors[0].longMessage)
-    }
+  const handleGoogleSignIn = () => {
+    // UI only - no actual authentication
+    alert("Google Sign-In will be integrated soon!")
   }
 
   // Focus first input when code screen appears
@@ -75,7 +32,7 @@ export default function SignIn() {
     }
   }, [step])
 
-  const handleCodeChange = async (index: number, value: string) => {
+  const handleCodeChange = (index: number, value: string) => {
     if (value.length <= 1) {
       const newCode = [...code]
       newCode[index] = value
@@ -90,23 +47,10 @@ export default function SignIn() {
       if (index === 5 && value) {
         const isComplete = newCode.every((digit) => digit.length === 1)
         if (isComplete) {
-          try {
-            const completeCode = newCode.join("")
-            const result = await signIn?.attemptFirstFactor({
-              strategy: "email_code",
-              code: completeCode,
-            })
-
-            if (result?.status === "complete") {
-              await setActive({ session: result.createdSessionId })
-              setStep("success")
-              setTimeout(() => {
-                router.push("/")
-              }, 2000)
-            }
-          } catch (err: any) {
-            console.error("Error:", err.errors[0].longMessage)
-          }
+          setStep("success")
+          setTimeout(() => {
+            window.location.href = "/"
+          }, 2000)
         }
       }
     }

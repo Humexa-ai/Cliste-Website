@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react"
 import { Menu, X, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 
 const navigation = [
   { name: "Dentists", href: "#features" },
@@ -172,17 +171,12 @@ export function GlassmorphismNav() {
 
               {/* Desktop CTA Button */}
               <div className="hidden md:block">
-                <SignedOut>
-                  <Link href="/sign-in">
-                    <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group">
-                      <span className="mr-2">Log In</span>
-                      <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
-                  </Link>
-                </SignedOut>
-                <SignedIn>
-                  <UserButton afterSignOutUrl="/" />
-                </SignedIn>
+                <Link href="/sign-in">
+                  <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group">
+                    <span className="mr-2">Log In</span>
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+                </Link>
               </div>
 
               {/* Mobile Menu Button */}
@@ -258,26 +252,19 @@ export function GlassmorphismNav() {
                   ),
                 )}
                 <div className="h-px bg-white/10 my-2" />
-                <SignedOut>
-                  <Link href="/sign-in" className="w-full">
-                    <button
-                      className={`relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group transform w-full ${
-                        isOpen ? "animate-mobile-menu-item" : ""
-                      }`}
-                      style={{
-                        animationDelay: isOpen ? `${navigation.length * 80 + 150}ms` : "0ms",
-                      }}
-                    >
-                      <span className="mr-2">Log In</span>
-                      <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
-                  </Link>
-                </SignedOut>
-                <SignedIn>
-                  <div className={`flex items-center justify-center ${isOpen ? "animate-mobile-menu-item" : ""}`}>
-                    <UserButton afterSignOutUrl="/" />
-                  </div>
-                </SignedIn>
+                <Link href="/sign-in" className="w-full">
+                  <button
+                    className={`relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group transform w-full ${
+                      isOpen ? "animate-mobile-menu-item" : ""
+                    }`}
+                    style={{
+                      animationDelay: isOpen ? `${navigation.length * 80 + 150}ms` : "0ms",
+                    }}
+                  >
+                    <span className="mr-2">Log In</span>
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
