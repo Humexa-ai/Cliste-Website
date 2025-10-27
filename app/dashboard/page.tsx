@@ -82,13 +82,15 @@ export const Logo = () => {
       href="/dashboard"
       className="font-normal flex space-x-3 items-center text-sm text-black py-1 relative z-20"
     >
-      <Image
-        src="/images/cliste-logo.png"
-        alt="Cliste Logo"
-        width={32}
-        height={32}
-        className="flex-shrink-0"
-      />
+      <div className="w-8 h-8 flex-shrink-0">
+        <Image
+          src="/images/cliste-logo.png"
+          alt="Cliste Logo"
+          width={32}
+          height={32}
+          className="w-full h-full object-contain"
+        />
+      </div>
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -104,15 +106,17 @@ export const LogoIcon = () => {
   return (
     <Link
       href="/dashboard"
-      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+      className="font-normal flex items-center justify-center text-sm text-black py-1 relative z-20"
     >
-      <Image
-        src="/images/cliste-logo.png"
-        alt="Cliste Logo"
-        width={32}
-        height={32}
-        className="flex-shrink-0"
-      />
+      <div className="w-8 h-8 flex-shrink-0">
+        <Image
+          src="/images/cliste-logo.png"
+          alt="Cliste Logo"
+          width={32}
+          height={32}
+          className="w-full h-full object-contain"
+        />
+      </div>
     </Link>
   )
 }
