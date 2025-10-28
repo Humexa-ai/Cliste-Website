@@ -181,7 +181,7 @@ export function GlassmorphismNav() {
 
         {/* Backdrop blur overlay - instant */}
         {isOpen && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-black/10 md:hidden" style={{ zIndex: -1 }} />
+          <div className="fixed inset-0 backdrop-blur-md bg-black/10 md:hidden" style={{ zIndex: -1 }} />
         )}
 
         <div className="md:hidden relative">
@@ -191,7 +191,7 @@ export function GlassmorphismNav() {
               isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
           >
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-2xl">
+            <div className="bg-white/10 border border-white/20 rounded-2xl p-4 shadow-2xl">
               <div className="flex flex-col space-y-1">
                 {navigation.map((item, index) =>
                   item.href.startsWith("/") ? (
