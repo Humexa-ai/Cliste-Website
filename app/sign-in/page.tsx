@@ -206,11 +206,11 @@ export default function SignIn() {
           <div className="fixed inset-0 backdrop-blur-md md:hidden" style={{ zIndex: -1 }} />
         )}
 
-        <div className="md:hidden relative">
+        <div className="md:hidden relative overflow-hidden">
           {/* Menu container */}
           <div
-            className={`w-[90vw] max-w-xs mx-auto transition-all duration-300 ease-out origin-top ${
-              isMobileMenuOpen ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
+            className={`w-[90vw] max-w-xs mx-auto transition-all duration-300 ease-out ${
+              isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
             }`}
           >
             <div className="bg-white/10 border border-white/20 border-t-0 rounded-b-3xl p-4 shadow-2xl">
