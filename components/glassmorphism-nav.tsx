@@ -181,7 +181,7 @@ export function GlassmorphismNav() {
 
         {/* Backdrop blur overlay - instant */}
         {isOpen && (
-          <div className="fixed inset-0 backdrop-blur-md bg-black/10 md:hidden" style={{ zIndex: -1 }} />
+          <div className="fixed inset-0 backdrop-blur-md md:hidden" style={{ zIndex: -1 }} />
         )}
 
         <div className="md:hidden relative">
