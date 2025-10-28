@@ -97,13 +97,18 @@ export function GlassmorphismNav() {
 
   return (
     <>
+      {/* Backdrop blur overlay - instant, behind everything */}
+      {isOpen && (
+        <div className="fixed inset-0 backdrop-blur-md md:hidden z-40" />
+      )}
+
       <nav
         className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-in-out ${
           isVisible ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0 pointer-events-none"
         }`}
       >
         {/* Main Navigation */}
-        <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">
+        <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto relative z-10">
           <div 
             className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 md:px-6 md:py-2"
             style={{
@@ -185,12 +190,7 @@ export function GlassmorphismNav() {
           </div>
         </div>
 
-        {/* Backdrop blur overlay - instant */}
-        {isOpen && (
-          <div className="fixed inset-0 backdrop-blur-md md:hidden" style={{ zIndex: -1 }} />
-        )}
-
-        <div className="md:hidden relative overflow-hidden">
+        <div className="md:hidden relative overflow-hidden z-10">
           {/* Menu container */}
           <div
             className={`w-[90vw] max-w-xs mx-auto transition-all duration-300 ease-out ${
