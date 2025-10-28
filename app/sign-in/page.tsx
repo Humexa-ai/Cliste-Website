@@ -3,13 +3,55 @@
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import Image from "next/image"
 import Aurora from "@/components/Aurora"
+import { Footer } from "@/components/footer"
+import { Menu, X, ArrowRight } from "lucide-react"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
   const [step, setStep] = useState<"email" | "code" | "success">("email")
   const [code, setCode] = useState(["", "", "", "", "", ""])
+  const [isNavVisible, setIsNavVisible] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const codeInputRefs = useRef<(HTMLInputElement | null)[]>([])
+  const lastScrollY = useRef(0)
+  const ticking = useRef(false)
+
+  // Navbar scroll behavior
+  useEffect(() => {
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY
+      
+      if (currentScrollY < 10) {
+        setIsNavVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
+
+      if (currentScrollY > lastScrollY.current + 5) {
+        setIsNavVisible(false)
+      } else if (currentScrollY < lastScrollY.current - 5) {
+        setIsNavVisible(true)
+      }
+
+      lastScrollY.current = currentScrollY
+      ticking.current = false
+    }
+
+    const handleScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(controlNavbar)
+        ticking.current = true
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -19,8 +61,8 @@ export default function SignIn() {
   }
 
   const handleGoogleSignIn = () => {
-    // UI only - redirect to dashboard
-    window.location.href = "/dashboard"
+    // UI only - no actual authentication
+    console.log("Google sign-in clicked (UI demo only)")
   }
 
   // Focus first input when code screen appears
@@ -48,9 +90,7 @@ export default function SignIn() {
         const isComplete = newCode.every((digit) => digit.length === 1)
         if (isComplete) {
           setStep("success")
-          setTimeout(() => {
-            window.location.href = "/dashboard"
-          }, 2000)
+          // UI only - no actual authentication or redirect
         }
       }
     }
@@ -70,8 +110,15 @@ export default function SignIn() {
     setCode(["", "", "", "", "", ""])
   }
 
+  const navigation = [
+    { name: "Dentists", href: "/#features" },
+    { name: "Barbers & Salons", href: "/#ai-team" },
+    { name: "Restaurants", href: "/#testimonials" },
+    { name: "Car Dealerships", href: "/car-dealerships" },
+  ]
+
   return (
-    <div className="flex w-full flex-col min-h-screen bg-black relative overflow-hidden">
+    <div className="flex w-full flex-col min-h-screen bg-black relative">
       {/* Aurora Background */}
       <div className="fixed inset-0 w-full h-full">
         <Aurora
@@ -82,9 +129,115 @@ export default function SignIn() {
         />
       </div>
 
+      {/* Navbar */}
+      <nav
+        className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-out ${
+          isNavVisible ? "translate-y-0 opacity-100" : "-translate-y-[200%] opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">
+          <div 
+            className={`border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2 ${
+              isMobileMenuOpen 
+                ? "bg-transparent md:bg-white/10 md:backdrop-blur-md" 
+                : "bg-white/10 backdrop-blur-md transition-colors duration-300"
+            }`}
+            style={isMobileMenuOpen ? { backdropFilter: 'none' } : undefined}
+          >
+            <div className="flex items-center justify-between">
+              <Link
+                href="/"
+                className="flex items-center hover:scale-105 transition-transform duration-200 cursor-pointer"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
+                  <Image
+                    src="/images/cliste-logo.png"
+                    alt="Cliste"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </Link>
+
+              <div className="hidden md:flex items-center space-x-8">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-white/80 hover:text-white hover:scale-105 transition-all duration-200 font-medium cursor-pointer"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="hidden md:block">
+                <Link href="/">
+                  <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group">
+                    <span className="mr-2">Return Home</span>
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+                </Link>
+              </div>
+
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden text-white hover:scale-110 transition-transform duration-200 cursor-pointer"
+              >
+                <div className="relative w-6 h-6">
+                  <Menu
+                    size={24}
+                    className={`absolute inset-0 transition-all duration-300 ${
+                      isMobileMenuOpen ? "opacity-0 rotate-180 scale-75" : "opacity-100 rotate-0 scale-100"
+                    }`}
+                  />
+                  <X
+                    size={24}
+                    className={`absolute inset-0 transition-all duration-300 ${
+                      isMobileMenuOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-180 scale-75"
+                    }`}
+                  />
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="md:hidden relative">
+          <div
+            className={`mt-2 w-[90vw] max-w-xs mx-auto transition-all duration-500 ease-out transform-gpu ${
+              isMobileMenuOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-8 scale-95 pointer-events-none"
+            }`}
+          >
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-2xl">
+              <div className="flex flex-col space-y-1">
+                {navigation.map((item, index) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg px-3 py-3 text-left transition-all duration-300 font-medium cursor-pointer transform hover:scale-[1.02] hover:translate-x-1"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+                <div className="h-px bg-white/10 my-2" />
+                <Link href="/" className="w-full">
+                  <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group transform w-full">
+                    <span className="mr-2">Return Home</span>
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Content Layer */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4">
-        <div className="w-full max-w-sm">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-32 md:py-24">
+        <div className="w-full max-w-xs md:max-w-sm my-8 md:my-0">
           <AnimatePresence mode="wait">
             {step === "email" ? (
               <motion.div
@@ -283,6 +436,11 @@ export default function SignIn() {
             )}
           </AnimatePresence>
         </div>
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10">
+        <Footer />
       </div>
     </div>
   )

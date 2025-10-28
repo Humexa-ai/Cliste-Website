@@ -1417,11 +1417,9 @@ export function SplitScreenBeforeAfter() {
 
                   {/* Scrolling Testimonials */}
                   <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-8 lg:mt-0 opacity-100">
-                    <div className="group flex overflow-hidden p-2 [--gap:1rem] [gap:var(--gap)] flex-row [--duration:80s]">
-                      <div className="flex shrink-0 justify-around [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
-                        {[...Array(2)].map((_, outerIndex) => (
-                          [...Array(2)].map((_, setIndex) => (
-                          [
+                    <div className="group flex [--gap:1rem] [gap:var(--gap)] flex-row [--duration:80s]">
+                      <div className="flex shrink-0 [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
+                        {[
                             {
                               author: {
                                 name: "Michael",
@@ -1466,7 +1464,7 @@ export function SplitScreenBeforeAfter() {
                             }
                           ].map((testimonial, i) => (
                             <div
-                              key={`${outerIndex}-${setIndex}-${i}`}
+                              key={`testimonial-${i}`}
                               className="flex flex-col rounded-lg border-t bg-gradient-to-b from-slate-50 to-white p-4 sm:p-6 hover:from-slate-100 hover:to-slate-50 max-w-[320px] sm:max-w-[320px] transition-colors duration-300 shadow-sm"
                             >
                               <div className="flex items-center gap-3">
@@ -1488,9 +1486,77 @@ export function SplitScreenBeforeAfter() {
                                 {testimonial.text}
                               </p>
                             </div>
-                          ))
-                        ))
-                        ))}
+                          ))}
+                      </div>
+                      <div className="flex shrink-0 [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]" aria-hidden="true">
+                        {[
+                            {
+                              author: {
+                                name: "Michael",
+                                handle: "Sales Manager"
+                              },
+                              text: "We've cut our response time in half. Customers get instant answers on WhatsApp, Instagram, and our website - even when we're closed. Our team can focus on closing deals instead of answering the same questions all day."
+                            },
+                            {
+                              author: {
+                                name: "Sarah",
+                                handle: "General Manager"
+                              },
+                              text: "The system handles NCT questions, mileage inquiries, and trade-in valuations automatically. It's like having an extra team member who never sleeps. Our conversion rate has improved significantly."
+                            },
+                            {
+                              author: {
+                                name: "David",
+                                handle: "Dealership Owner"
+                              },
+                              text: "What impressed me most is how it filters serious buyers from tire kickers. The system qualifies leads across all our channels - phone, social media, website - saving us hours every single day."
+                            },
+                            {
+                              author: {
+                                name: "Emma",
+                                handle: "Operations Manager"
+                              },
+                              text: "Clutch handles customer queries 24/7 across every platform we use. Our team is no longer overwhelmed with repetitive questions, and customers love the instant responses on their preferred channel."
+                            },
+                            {
+                              author: {
+                                name: "James",
+                                handle: "CEO"
+                              },
+                              text: "The omnichannel capability is a game-changer. Whether customers reach out on Instagram, WhatsApp, phone calls, or our website widget, they get the same quality service. Our lead quality has never been better."
+                            },
+                            {
+                              author: {
+                                name: "Lisa",
+                                handle: "Sales Director"
+                              },
+                              text: "We used to spend hours answering basic questions about financing, trade-ins, and vehicle availability. Now the system handles all of that instantly, and our sales team only steps in when it's time to close the deal."
+                            }
+                          ].map((testimonial, i) => (
+                            <div
+                              key={`testimonial-duplicate-${i}`}
+                              className="flex flex-col rounded-lg border-t bg-gradient-to-b from-slate-50 to-white p-4 sm:p-6 hover:from-slate-100 hover:to-slate-50 max-w-[320px] sm:max-w-[320px] transition-colors duration-300 shadow-sm"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="h-12 w-12 rounded-full bg-slate-300 flex-shrink-0 flex items-center justify-center">
+                                  <span className="text-slate-600 font-semibold text-lg">
+                                    {testimonial.author.name.charAt(0)}
+                                  </span>
+                                </div>
+                                <div className="flex flex-col items-start">
+                                  <h3 className="text-md font-semibold leading-none text-slate-900">
+                                    {testimonial.author.name}
+                                  </h3>
+                                  <p className="text-sm text-slate-600 mt-1">
+                                    {testimonial.author.handle}
+                                  </p>
+                                </div>
+                              </div>
+                              <p className="sm:text-md mt-4 text-sm text-slate-600 leading-relaxed">
+                                {testimonial.text}
+                              </p>
+                            </div>
+                          ))}
                       </div>
                     </div>
 
