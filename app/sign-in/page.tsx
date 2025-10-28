@@ -204,41 +204,48 @@ export default function SignIn() {
           </div>
         </div>
         
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div 
-              className="md:hidden relative"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="mt-2 w-[90vw] max-w-xs mx-auto">
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-2xl">
-                  <div className="flex flex-col space-y-1">
-                    {navigation.map((item, index) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg px-3 py-3 text-left transition-all duration-300 font-medium cursor-pointer transform hover:scale-[1.02] hover:translate-x-1"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                    <div className="h-px bg-white/10 my-2" />
-                    <Link href="/" className="w-full">
-                      <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group transform w-full">
-                        <span className="mr-2">Return Home</span>
-                        <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                      </button>
-                    </Link>
-                  </div>
-                </div>
+        <div className="md:hidden relative">
+          {/* Menu container */}
+          <div
+            className={`mt-2 w-[90vw] max-w-xs mx-auto transition-all duration-500 ease-out transform-gpu ${
+              isMobileMenuOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-8 scale-95 pointer-events-none"
+            }`}
+          >
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-2xl">
+              <div className="flex flex-col space-y-1">
+                {navigation.map((item, index) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`text-white/80 hover:text-white hover:bg-white/10 rounded-lg px-3 py-3 text-left transition-all duration-300 font-medium cursor-pointer transform hover:scale-[1.02] hover:translate-x-1 ${
+                      isMobileMenuOpen ? "animate-mobile-menu-item" : ""
+                    }`}
+                    style={{
+                      animationDelay: isMobileMenuOpen ? `${index * 80 + 100}ms` : "0ms",
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+                <div className="h-px bg-white/10 my-2" />
+                <Link href="/" className="w-full">
+                  <button
+                    className={`relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group transform w-full ${
+                      isMobileMenuOpen ? "animate-mobile-menu-item" : ""
+                    }`}
+                    style={{
+                      animationDelay: isMobileMenuOpen ? `${navigation.length * 80 + 150}ms` : "0ms",
+                    }}
+                  >
+                    <span className="mr-2">Return Home</span>
+                    <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+                </Link>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        </div>
       </nav>
 
       {/* Content Layer */}
