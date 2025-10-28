@@ -104,9 +104,11 @@ export function GlassmorphismNav() {
       >
         {/* Main Navigation */}
         <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">
-          <div className={`bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 md:px-6 md:py-2 ${
-            isOpen ? "rounded-t-3xl md:rounded-full" : "rounded-full"
-          }`}>
+          <div 
+            className={`bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 md:px-6 md:py-2 transition-all duration-300 ease-out ${
+              isOpen ? "rounded-t-3xl md:rounded-full" : "rounded-full"
+            }`}
+          >
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link
@@ -189,8 +191,8 @@ export function GlassmorphismNav() {
         <div className="md:hidden relative">
           {/* Menu container */}
           <div
-            className={`w-[90vw] max-w-xs mx-auto transition-opacity duration-200 ease-out ${
-              isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+            className={`w-[90vw] max-w-xs mx-auto transition-all duration-300 ease-out origin-top ${
+              isOpen ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
             }`}
           >
             <div className="bg-white/10 border border-white/20 border-t-0 rounded-b-3xl p-4 shadow-2xl">
