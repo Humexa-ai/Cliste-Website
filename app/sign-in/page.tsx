@@ -197,6 +197,11 @@ export default function SignIn() {
           </div>
         </div>
         
+        {/* Backdrop blur overlay - instant */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 backdrop-blur-sm bg-black/10 md:hidden" style={{ zIndex: -1 }} />
+        )}
+
         <div className="md:hidden relative">
           {/* Menu container */}
           <div
