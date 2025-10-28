@@ -180,15 +180,6 @@ export function GlassmorphismNav() {
         </div>
 
         <div className="md:hidden relative">
-          {/* Backdrop overlay */}
-          <div
-            className={`fixed inset-0 bg-black/20 backdrop-blur-sm transition-all duration-300 ${
-              isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
-            onClick={() => setIsOpen(false)}
-            style={{ top: "0", left: "0", right: "0", bottom: "0", zIndex: -1 }}
-          />
-
           {/* Menu container */}
           <div
             className={`mt-2 w-[90vw] max-w-xs mx-auto transition-all duration-500 ease-out transform-gpu ${
