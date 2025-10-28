@@ -137,9 +137,11 @@ export default function SignIn() {
       >
         <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">
           <div 
-            className={`bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 md:px-6 md:py-2 transition-all duration-300 ease-out ${
-              isMobileMenuOpen ? "rounded-t-3xl md:rounded-full" : "rounded-full"
-            }`}
+            className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 md:px-6 md:py-2"
+            style={{
+              borderRadius: isMobileMenuOpen ? '1.5rem 1.5rem 0 0' : '9999px',
+              transition: 'border-radius 0.3s ease-out'
+            }}
           >
             <div className="flex items-center justify-between">
               <Link
