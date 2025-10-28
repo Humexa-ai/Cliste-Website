@@ -97,6 +97,15 @@ export function GlassmorphismNav() {
 
   return (
     <>
+      {/* Backdrop blur - behind nav, only on mobile when menu open */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 backdrop-blur-md md:hidden" 
+          style={{ zIndex: 45 }}
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
       <nav
         className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-in-out ${
           isVisible ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0 pointer-events-none"
