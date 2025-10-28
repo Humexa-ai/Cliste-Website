@@ -9,6 +9,7 @@ import { TyreKickersSection } from "@/components/tyre-kickers-section"
 import { InstagramServiceSection } from "@/components/instagram-service-section"
 import { OmnichannelSection } from "@/components/omnichannel-section"
 import { WhatsAppDemoSection } from "@/components/whatsapp-demo-section"
+import { DealershipFAQSection } from "@/components/dealership-faq-section"
 
 export default function CarDealershipsPage() {
   return (
@@ -43,6 +44,9 @@ export default function CarDealershipsPage() {
           <InstagramServiceSection />
 
           <OmnichannelSection />
+
+          {/* FAQ Section */}
+          <DealershipFAQSection />
 
           {/* Footer */}
           <Footer />

@@ -1391,10 +1391,9 @@ export function SplitScreenBeforeAfter() {
             {/* Testimonials Section */}
             <div ref={testimonialsSectionRef} className="mt-6 lg:mt-32 pt-6 lg:pt-32 border-t border-slate-200">
               <div className="max-w-6xl mx-auto pb-12 lg:pb-20">
-                <div className={`transition-all duration-700 ease-out ${
-                  testimonialsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}>
-                  <div className="text-left max-w-4xl lg:max-w-none mb-8 lg:mb-12">
+                  <div className={`text-left max-w-4xl lg:max-w-none mb-8 lg:mb-12 transition-all duration-700 ease-out ${
+                    testimonialsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  }`}>
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200/80 mb-4">
                       <svg className="w-4 h-4 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -1417,7 +1416,7 @@ export function SplitScreenBeforeAfter() {
                   </div>
 
                   {/* Scrolling Testimonials */}
-                  <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-8 lg:mt-0">
+                  <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-8 lg:mt-0 opacity-100">
                     <div className="group flex overflow-hidden p-2 [--gap:1rem] [gap:var(--gap)] flex-row [--duration:80s]">
                       <div className="flex shrink-0 justify-around [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
                         {[...Array(2)].map((_, outerIndex) => (
@@ -1498,7 +1497,6 @@ export function SplitScreenBeforeAfter() {
                     <div className="pointer-events-none absolute inset-y-0 left-0 w-1/12 sm:w-1/3 bg-gradient-to-r from-white" />
                     <div className="pointer-events-none absolute inset-y-0 right-0 w-1/12 sm:w-1/3 bg-gradient-to-l from-white" />
                   </div>
-                </div>
               </div>
             </div>
           </div>
