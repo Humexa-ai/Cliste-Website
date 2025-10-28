@@ -145,7 +145,7 @@ export default function SignIn() {
             className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 md:px-6 md:py-2"
             style={{
               borderRadius: isMobileMenuOpen ? '1.5rem 1.5rem 0 0' : '9999px',
-              transition: 'border-radius 0.3s ease-out'
+              transition: 'border-radius 0.15s ease-out'
             }}
           >
             <div className="flex items-center justify-between">
@@ -211,9 +211,12 @@ export default function SignIn() {
         <div className="md:hidden relative overflow-hidden z-10">
           {/* Menu container */}
           <div
-            className={`w-[90vw] max-w-xs mx-auto transition-all duration-300 ease-out ${
+            className={`w-[90vw] max-w-xs mx-auto ${
               isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
             }`}
+            style={{
+              transition: 'max-height 0.3s ease-out 0.15s, opacity 0.3s ease-out 0.15s'
+            }}
           >
             <div className="bg-white/10 border border-white/20 border-t-0 rounded-b-3xl p-4 shadow-2xl">
               <div className="flex flex-col space-y-1">
