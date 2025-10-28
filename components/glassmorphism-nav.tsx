@@ -15,70 +15,49 @@ const navigation = [
 export function GlassmorphismNav() {
   const [isOpen, setIsOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
-  const [hasLoaded, setHasLoaded] = useState(false)
   const lastScrollY = useRef(0)
+  const ticking = useRef(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setHasLoaded(true)
-    }, 100)
-
     const controlNavbar = () => {
-      if (typeof window === "undefined") return
-      
       const currentScrollY = window.scrollY
       const isMobile = window.innerWidth < 768
+      const scrollThreshold = isMobile ? 20 : 5
       
-      // Different thresholds for mobile vs desktop
-      const scrollThreshold = isMobile ? 10 : 50
+      // Always show when at the top
+      if (currentScrollY < 10) {
+        if (!isVisible) setIsVisible(true)
+        lastScrollY.current = currentScrollY
+        ticking.current = false
+        return
+      }
 
-      console.log("[v0] Scroll - Y:", currentScrollY, "Last:", lastScrollY.current, "isMobile:", isMobile, "isVisible:", isVisible)
-
-      // Only hide/show after scrolling past threshold
-      if (currentScrollY > scrollThreshold) {
-        if (isMobile) {
-          // Mobile: Super aggressive - any movement
-          if (currentScrollY > lastScrollY.current) {
-            console.log("[v0] 📱⬇️ MOBILE: Hiding navbar")
-            setIsVisible(false)
-          } else if (currentScrollY < lastScrollY.current) {
-            console.log("[v0] 📱⬆️ MOBILE: Showing navbar")
-            setIsVisible(true)
-          }
-        } else {
-          // Desktop: Require 5px movement
-          if (currentScrollY > lastScrollY.current && currentScrollY - lastScrollY.current > 5) {
-            console.log("[v0] 💻⬇️ DESKTOP: Hiding navbar")
-            setIsVisible(false)
-          } else if (lastScrollY.current - currentScrollY > 5) {
-            console.log("[v0] 💻⬆️ DESKTOP: Showing navbar")
-            setIsVisible(true)
-          }
-        }
-      } else {
-        // Always show navbar when near top
-        if (!isVisible) {
-          console.log("[v0] 🔝 Near top - showing navbar")
-          setIsVisible(true)
-        }
+      // Check scroll direction with larger threshold for mobile
+      if (currentScrollY > lastScrollY.current + scrollThreshold) {
+        // Scrolling down
+        setIsVisible(false)
+      } else if (currentScrollY < lastScrollY.current - scrollThreshold) {
+        // Scrolling up
+        setIsVisible(true)
       }
 
       lastScrollY.current = currentScrollY
+      ticking.current = false
     }
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", controlNavbar, { passive: true })
-      console.log("[v0] ✅ Scroll listener added")
-
-      return () => {
-        window.removeEventListener("scroll", controlNavbar)
-        clearTimeout(timer)
-        console.log("[v0] ❌ Scroll listener removed")
+    const handleScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(controlNavbar)
+        ticking.current = true
       }
     }
 
-    return () => clearTimeout(timer)
-  }, [isVisible]) // Need isVisible for checking in callback
+    window.addEventListener("scroll", handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   const scrollToTop = () => {
     console.log("[v0] Scrolling to top")
@@ -119,12 +98,9 @@ export function GlassmorphismNav() {
   return (
     <>
       <nav
-        className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
-          isVisible ? "translate-y-0 opacity-100" : "-translate-y-32 opacity-0 pointer-events-none"
-        } ${hasLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-        style={{
-          transition: hasLoaded ? "all 0.3s ease-out" : "opacity 0.8s ease-out, transform 0.8s ease-out",
-        }}
+        className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-in-out ${
+          isVisible ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0 pointer-events-none"
+        }`}
       >
         {/* Main Navigation */}
         <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">

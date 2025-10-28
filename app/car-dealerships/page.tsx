@@ -12,8 +12,8 @@ import { WhatsAppDemoSection } from "@/components/whatsapp-demo-section"
 
 export default function CarDealershipsPage() {
   return (
-    <div className="min-h-screen bg-black overflow-hidden">
-      <main className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen bg-black">
+      <main className="min-h-screen relative">
         {/* Aurora background */}
         <div className="fixed inset-0 w-full h-full">
           <Aurora colorStops={["#475569", "#64748b", "#475569"]} amplitude={1.2} blend={0.6} speed={0.8} />

@@ -65,7 +65,7 @@ export function ProblemSolutionSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-24 px-4 relative z-10">
+    <section ref={sectionRef} className="pt-0 pb-16 sm:py-24 px-4 relative z-10">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div

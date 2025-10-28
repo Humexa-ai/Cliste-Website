@@ -10,12 +10,14 @@ export function SplitScreenBeforeAfter() {
   const [voiceInView, setVoiceInView] = useState(false)
   const [serviceInView, setServiceInView] = useState(false)
   const [tyreKickersInView, setTyreKickersInView] = useState(false)
+  const [testimonialsInView, setTestimonialsInView] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const sectionRef = useRef<HTMLDivElement>(null)
   const whatsappSectionRef = useRef<HTMLDivElement>(null)
   const voiceSectionRef = useRef<HTMLDivElement>(null)
   const serviceSectionRef = useRef<HTMLDivElement>(null)
   const tyreKickersSectionRef = useRef<HTMLDivElement>(null)
+  const testimonialsSectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Mobile-friendly observer - triggers much earlier on small screens
@@ -42,6 +44,8 @@ export function SplitScreenBeforeAfter() {
             setVoiceInView(true)
           } else if (entry.target === serviceSectionRef.current) {
             setServiceInView(true)
+          } else if (entry.target === testimonialsSectionRef.current) {
+            setTestimonialsInView(true)
           }
         }
       })
@@ -61,6 +65,7 @@ export function SplitScreenBeforeAfter() {
     if (voiceSectionRef.current) observer.observe(voiceSectionRef.current)
     if (serviceSectionRef.current) observer.observe(serviceSectionRef.current)
     if (tyreKickersSectionRef.current) tyreKickersObserver.observe(tyreKickersSectionRef.current)
+    if (testimonialsSectionRef.current) observer.observe(testimonialsSectionRef.current)
 
     // Only check if the FIRST section (hero) is in viewport on mount
     // This ensures the hero animates immediately, but other sections wait for scroll
@@ -602,14 +607,14 @@ export function SplitScreenBeforeAfter() {
             </div>
 
             {/* Voice Agent Section - order is already correct: phones LEFT, text RIGHT */}
-            <div ref={voiceSectionRef} className="mt-0 lg:mt-24 pt-0 lg:pt-24 lg:border-t border-slate-200">
+            <div ref={voiceSectionRef} className="-mt-32 lg:mt-24 pt-6 lg:pt-24 border-t border-slate-200">
               <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-center max-w-6xl mx-auto">
                 <div
                   className={`order-2 lg:order-1 transition-all duration-700 ease-out ${
                     voiceInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
                 >
-                  <div className="relative h-[550px] lg:h-[600px] max-w-[500px] lg:max-w-[550px] mx-auto">
+                  <div className="relative h-[500px] lg:h-[600px] max-w-[500px] lg:max-w-[550px] mx-auto">
                     <div
                       className="absolute right-0 top-0 w-[200px] lg:w-[60%] z-20 transition-transform duration-500 ease-out will-change-transform"
                       style={{
@@ -891,7 +896,7 @@ export function SplitScreenBeforeAfter() {
             </div>
 
             {/* Service & Parts Section */}
-            <div ref={serviceSectionRef} className="mt-6 lg:mt-32 pt-6 lg:pt-32 border-t border-slate-200">
+            <div ref={serviceSectionRef} className="-mt-7 lg:mt-32 pt-6 lg:pt-32 border-t border-slate-200">
               <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-center max-w-6xl mx-auto">
                 <div
                   className={`transition-all duration-700 ease-out ${
@@ -1005,7 +1010,7 @@ export function SplitScreenBeforeAfter() {
                 </div>
 
                 <div
-                  className={`transition-all duration-700 ease-out delay-100 ${
+                  className={`transition-all duration-700 ease-out delay-100 mb-8 lg:mb-0 ${
                     serviceInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
                 >
@@ -1133,11 +1138,15 @@ export function SplitScreenBeforeAfter() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                {/* Tyre Kickers Section - swapped order so chat mockup is on LEFT, text on RIGHT */}
+            {/* Tyre Kickers Section - swapped order so chat mockup is on LEFT, text on RIGHT */}
+            <div className="mt-6 lg:mt-32 pt-6 lg:pt-32 border-t border-slate-200">
+              <div className="grid lg:grid-cols-2 gap-4 lg:gap-16 items-center max-w-6xl mx-auto">
                 <div
                   ref={tyreKickersSectionRef}
-                  className={`order-2 lg:order-1 transition-all duration-700 ease-out mt-6 lg:mt-24 ${
+                  className={`order-2 lg:order-1 transition-all duration-700 ease-out ${
                     tyreKickersInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
                 >
@@ -1267,7 +1276,7 @@ export function SplitScreenBeforeAfter() {
 
                 {/* Text on RIGHT desktop, ABOVE on mobile */}
                 <div
-                  className={`order-1 lg:order-2 transition-all duration-700 ease-out delay-100 mt-12 lg:mt-24 ${
+                  className={`order-1 lg:order-2 transition-all duration-700 ease-out delay-100 ${
                     tyreKickersInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   }`}
                 >
@@ -1376,8 +1385,122 @@ export function SplitScreenBeforeAfter() {
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
-          </div>
+
+            {/* Testimonials Section */}
+            <div ref={testimonialsSectionRef} className="mt-6 lg:mt-32 pt-6 lg:pt-32 border-t border-slate-200">
+              <div className="max-w-6xl mx-auto pb-12 lg:pb-20">
+                <div className={`transition-all duration-700 ease-out ${
+                  testimonialsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}>
+                  <div className="text-left max-w-4xl lg:max-w-none mb-8 lg:mb-12">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200/80 mb-4">
+                      <svg className="w-4 h-4 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                      <span className="text-slate-700 font-semibold text-sm uppercase tracking-wide">
+                        Testimonials
+                      </span>
+                    </div>
+
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 lg:mb-6">
+                      <span className="block text-slate-900 whitespace-nowrap">Trusted by Dealerships</span>
+                      <span className="block bg-gradient-to-r from-slate-600 to-slate-400 bg-clip-text text-transparent">
+                        Nationwide
+                      </span>
+                    </h2>
+
+                    <p className="text-slate-600 text-base lg:text-lg leading-relaxed">
+                      See what dealership owners and managers are saying about Clutch By Cliste
+                    </p>
+                  </div>
+
+                  {/* Scrolling Testimonials */}
+                  <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-8 lg:mt-0">
+                    <div className="group flex overflow-hidden p-2 [--gap:1rem] [gap:var(--gap)] flex-row [--duration:80s]">
+                      <div className="flex shrink-0 justify-around [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
+                        {[...Array(2)].map((_, outerIndex) => (
+                          [...Array(2)].map((_, setIndex) => (
+                          [
+                            {
+                              author: {
+                                name: "Michael",
+                                handle: "Sales Manager"
+                              },
+                              text: "We've cut our response time in half. Customers get instant answers on WhatsApp, Instagram, and our website - even when we're closed. Our team can focus on closing deals instead of answering the same questions all day."
+                            },
+                            {
+                              author: {
+                                name: "Sarah",
+                                handle: "General Manager"
+                              },
+                              text: "The system handles NCT questions, mileage inquiries, and trade-in valuations automatically. It's like having an extra team member who never sleeps. Our conversion rate has improved significantly."
+                            },
+                            {
+                              author: {
+                                name: "David",
+                                handle: "Dealership Owner"
+                              },
+                              text: "What impressed me most is how it filters serious buyers from tire kickers. The system qualifies leads across all our channels - phone, social media, website - saving us hours every single day."
+                            },
+                            {
+                              author: {
+                                name: "Emma",
+                                handle: "Operations Manager"
+                              },
+                              text: "Clutch handles customer queries 24/7 across every platform we use. Our team is no longer overwhelmed with repetitive questions, and customers love the instant responses on their preferred channel."
+                            },
+                            {
+                              author: {
+                                name: "James",
+                                handle: "CEO"
+                              },
+                              text: "The omnichannel capability is a game-changer. Whether customers reach out on Instagram, WhatsApp, phone calls, or our website widget, they get the same quality service. Our lead quality has never been better."
+                            },
+                            {
+                              author: {
+                                name: "Lisa",
+                                handle: "Sales Director"
+                              },
+                              text: "We used to spend hours answering basic questions about financing, trade-ins, and vehicle availability. Now the system handles all of that instantly, and our sales team only steps in when it's time to close the deal."
+                            }
+                          ].map((testimonial, i) => (
+                            <div
+                              key={`${outerIndex}-${setIndex}-${i}`}
+                              className="flex flex-col rounded-lg border-t bg-gradient-to-b from-slate-50 to-white p-4 sm:p-6 hover:from-slate-100 hover:to-slate-50 max-w-[320px] sm:max-w-[320px] transition-colors duration-300 shadow-sm"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="h-12 w-12 rounded-full bg-slate-300 flex-shrink-0 flex items-center justify-center">
+                                  <span className="text-slate-600 font-semibold text-lg">
+                                    {testimonial.author.name.charAt(0)}
+                                  </span>
+                                </div>
+                                <div className="flex flex-col items-start">
+                                  <h3 className="text-md font-semibold leading-none text-slate-900">
+                                    {testimonial.author.name}
+                                  </h3>
+                                  <p className="text-sm text-slate-600 mt-1">
+                                    {testimonial.author.handle}
+                                  </p>
+                                </div>
+                              </div>
+                              <p className="sm:text-md mt-4 text-sm text-slate-600 leading-relaxed">
+                                {testimonial.text}
+                              </p>
+                            </div>
+                          ))
+                        ))
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pointer-events-none absolute inset-y-0 left-0 w-1/12 sm:w-1/3 bg-gradient-to-r from-white" />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 w-1/12 sm:w-1/3 bg-gradient-to-l from-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
