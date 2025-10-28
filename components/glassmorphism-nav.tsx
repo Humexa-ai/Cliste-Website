@@ -104,7 +104,9 @@ export function GlassmorphismNav() {
       >
         {/* Main Navigation */}
         <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2">
+          <div className={`border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2 transition-all duration-300 ${
+            isOpen ? "bg-transparent" : "bg-white/10 backdrop-blur-md"
+          }`}>
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link

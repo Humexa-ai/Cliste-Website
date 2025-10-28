@@ -136,14 +136,9 @@ export default function SignIn() {
         }`}
       >
         <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto">
-          <div 
-            className={`border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2 ${
-              isMobileMenuOpen 
-                ? "bg-transparent md:bg-white/10 md:backdrop-blur-md" 
-                : "bg-white/10 backdrop-blur-md transition-colors duration-300"
-            }`}
-            style={isMobileMenuOpen ? { backdropFilter: 'none' } : undefined}
-          >
+          <div className={`border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2 transition-all duration-300 ${
+            isMobileMenuOpen ? "bg-transparent" : "bg-white/10 backdrop-blur-md"
+          }`}>
             <div className="flex items-center justify-between">
               <Link
                 href="/"
