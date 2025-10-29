@@ -129,6 +129,11 @@ export default function SignIn() {
         />
       </div>
 
+      {/* Instant backdrop blur when menu opens */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 backdrop-blur-md md:hidden" style={{ zIndex: 40 }} />
+      )}
+
       {/* Navbar */}
       <nav
         className={`fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-out ${
