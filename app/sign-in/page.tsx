@@ -114,7 +114,7 @@ export default function SignIn() {
     { name: "Dentists", href: "/#features" },
     { name: "Barbers & Salons", href: "/salons-barbers" },
     { name: "Restaurants", href: "/#testimonials" },
-    { name: "Dealerships", href: "/car-dealerships" },
+    { name: "Dealerships", href: "/dealerships" },
   ]
 
   return (
