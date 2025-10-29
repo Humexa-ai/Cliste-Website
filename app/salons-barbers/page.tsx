@@ -5,6 +5,7 @@ import Aurora from "@/components/Aurora"
 import { Footer } from "@/components/footer"
 import { SalonHeroHeader } from "@/components/salon-hero-header"
 import { SalonSplitScreen } from "@/components/salon-split-screen"
+import { SalonTestimonialsSection } from "@/components/salon-testimonials-section"
 import { SalonFAQSection } from "@/components/salon-faq-section"
 
 export default function SalonsPage() {
@@ -32,6 +33,9 @@ export default function SalonsPage() {
           </section>
 
           <SalonSplitScreen />
+
+          {/* Testimonials Section */}
+          <SalonTestimonialsSection />
 
           {/* FAQ Section */}
           <SalonFAQSection />
