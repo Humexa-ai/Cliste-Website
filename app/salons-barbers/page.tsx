@@ -4,11 +4,7 @@ import { GlassmorphismNav } from "@/components/glassmorphism-nav"
 import Aurora from "@/components/Aurora"
 import { Footer } from "@/components/footer"
 import { SalonHeroHeader } from "@/components/salon-hero-header"
-import { SplitScreenBeforeAfter } from "@/components/split-screen-before-after"
-import { TyreKickersSection } from "@/components/tyre-kickers-section"
-import { InstagramServiceSection } from "@/components/instagram-service-section"
-import { OmnichannelSection } from "@/components/omnichannel-section"
-import { WhatsAppDemoSection } from "@/components/whatsapp-demo-section"
+import { SalonSplitScreen } from "@/components/salon-split-screen"
 import { SalonFAQSection } from "@/components/salon-faq-section"
 
 export default function SalonsPage() {
@@ -35,15 +31,7 @@ export default function SalonsPage() {
             </div>
           </section>
 
-          <SplitScreenBeforeAfter />
-
-          <TyreKickersSection />
-
-          <WhatsAppDemoSection />
-
-          <InstagramServiceSection />
-
-          <OmnichannelSection />
+          <SalonSplitScreen />
 
           {/* FAQ Section */}
           <SalonFAQSection />
