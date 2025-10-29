@@ -113,13 +113,7 @@ export function GlassmorphismNav() {
       >
         {/* Main Navigation */}
         <div className="w-[90vw] max-w-xs md:max-w-4xl mx-auto relative z-10">
-          <div 
-            className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 md:px-6 md:py-2"
-            style={{
-              borderRadius: isOpen ? '1.5rem 1.5rem 0 0' : '9999px',
-              transition: 'border-radius 0.25s ease-out'
-            }}
-          >
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-3 md:px-6 md:py-2">
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link
@@ -197,14 +191,14 @@ export function GlassmorphismNav() {
         <div className="md:hidden relative overflow-hidden z-10">
           {/* Menu container */}
           <div
-            className={`w-[90vw] max-w-xs mx-auto ${
+            className={`mt-2 w-[90vw] max-w-xs mx-auto ${
               isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 pointer-events-none"
             }`}
             style={{
               transition: 'max-height 0.25s ease-out, opacity 0.25s ease-out'
             }}
           >
-            <div className="bg-white/10 border border-white/20 border-t-0 rounded-b-3xl p-4 shadow-2xl">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-2xl">
               <div className="flex flex-col space-y-1">
                 {navigation.map((item, index) =>
                   item.href.startsWith("/") ? (
