@@ -112,9 +112,9 @@ export default function SignIn() {
 
   const navigation = [
     { name: "Dentists", href: "/#features" },
-    { name: "Barbers & Salons", href: "/#ai-team" },
+    { name: "Barbers & Salons", href: "/salons-barbers" },
     { name: "Restaurants", href: "/#testimonials" },
-    { name: "Car Dealerships", href: "/car-dealerships" },
+    { name: "Dealerships", href: "/car-dealerships" },
   ]
 
   return (
