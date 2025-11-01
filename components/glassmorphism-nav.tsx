@@ -152,7 +152,7 @@ export function GlassmorphismNav() {
 
               {/* Desktop CTA Button */}
               <div className="hidden md:block">
-                <a href="https://dashboard-cliste-vercel-app.vercel.app" target="_blank" rel="noopener noreferrer">
+                <a href="https://dashboard.cliste.dev" target="_blank" rel="noopener noreferrer">
                   <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer group">
                     <span className="mr-2">Log In</span>
                     <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -217,7 +217,7 @@ export function GlassmorphismNav() {
                   ),
                 )}
                 <div className="h-px bg-white/10 my-2" />
-                <a href="https://dashboard-cliste-vercel-app.vercel.app" target="_blank" rel="noopener noreferrer" className="w-full">
+                <a href="https://dashboard.cliste.dev" target="_blank" rel="noopener noreferrer" className="w-full">
                   <button className="relative bg-white hover:bg-gray-50 text-black font-medium px-6 py-3 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-pointer group w-full">
                     <span className="mr-2">Log In</span>
                     <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
