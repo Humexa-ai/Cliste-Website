@@ -33,15 +33,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`font-sans antialiased ${dancingScript.variable} ${caveat.variable}`}>
-        <Suspense fallback={null}>
-          <NavigationTransition />
-          <PageTransition>{children}</PageTransition>
-        </Suspense>
-        <SpeedInsights />
-        <Analytics />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="dark">
+        <body className={`font-sans antialiased ${dancingScript.variable} ${caveat.variable}`}>
+          <Suspense fallback={null}>
+            <NavigationTransition />
+            <PageTransition>{children}</PageTransition>
+          </Suspense>
+          <SpeedInsights />
+          <Analytics />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
